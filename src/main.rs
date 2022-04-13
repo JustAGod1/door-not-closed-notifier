@@ -1,4 +1,6 @@
 use std::collections::HashSet;
+use std::thread::sleep;
+use std::time::Duration;
 use futures::StreamExt;
 use telegram_bot::*;
 use redis::{Client as RedisClient, Commands};
@@ -24,6 +26,7 @@ async fn main() {
         if let Err(e) = result {
             eprintln!("{}", e)
         }
+        sleep(Duration::from_millis(5000));
     }
 }
 
