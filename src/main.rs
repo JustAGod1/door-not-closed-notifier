@@ -62,27 +62,5 @@ async fn run(state: &mut State) -> Result<(), String> {
         }
     }
 
-
-    // Fetch new updates via long poll method
-    let mut stream = state.api.stream();
-    for _ in 0..5 {
-        if let Some(update) = stream.next().await {
-            // If the received update contains a new message...
-            let update = update.map_err(|a| a.to_string())?;
-            if let UpdateKind::Message(message) = update.kind {
-                if let MessageKind::Text { ref data, .. } = message.kind {
-                    // Print received text message to stdout.
-                    println!("<{}>: {}", &message.from.first_name, data);
-
-                    // Answer message with "Hi".
-                    state.api.send(message.text_reply(format!(
-                        "Hi, {}! You just wrote '{}'",
-                        &message.from.id, data
-                    ))).await.map_err(|a| a.to_string())?;
-                }
-            }
-        }
-    }
-
     Ok(())
 }
